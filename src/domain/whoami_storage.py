@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from datetime import datetime
 
 
@@ -8,6 +8,7 @@ class ClientInfo:
     ip_chain: list[str]
     direct_peer: str
     user_agent: str
+
 
 @dataclass
 class WhoamiEntity:
@@ -21,3 +22,6 @@ class WhoamiEntity:
     metadata: dict
     client: ClientInfo
     timestamp: datetime
+
+    def to_dict(self) -> dict:
+        return asdict(self)

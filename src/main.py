@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src.config import Settings
-from src.infrastructure.whoami_storage_adapter_mock import WhoamiStorageAdapterMock
+from src.infrastructure.whoami_storage_adapter_ignite import WhoamiStorageAdapterIgnite
 from src.api.v1.app import router as whoami_router
 
 
@@ -11,7 +11,9 @@ from src.api.v1.app import router as whoami_router
 async def lifespan(app: FastAPI):
     settings: Settings = app.state.settings
 
-    whoami_storage_adapter = WhoamiStorageAdapterMock()
+    whoami_storage_adapter = WhoamiStorageAdapterIgnite(
+        ignite_settings=settings.ignite_settings
+    )
     await whoami_storage_adapter.start()
 
     app.state.whoami_storage_adapter = whoami_storage_adapter

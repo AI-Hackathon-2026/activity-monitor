@@ -1,0 +1,47 @@
+services:
+  ignite-node1:
+    image: apacheignite/ignite:2.16.0
+    environment:
+      - CONFIG_URI=/opt/ignite/config/ignite-config.xml
+    volumes:
+      - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
+    networks: [backend]
+    ports:
+      - "10800:10800"  # Client port
+
+  ignite-node2:
+    image: apacheignite/ignite:2.16.0
+    environment:
+      - CONFIG_URI=/opt/ignite/config/ignite-config.xml
+    volumes:
+      - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
+    networks: [backend]
+
+  ignite-node3:
+    image: apacheignite/ignite:2.16.0
+    environment:
+      - CONFIG_URI=/opt/ignite/config/ignite-config.xml
+    volumes:
+      - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
+    networks: [backend]
+
+  # app1:
+  #   build: .
+  #   environment:
+  #     - SERVER_ID=node1
+  #     - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
+  #     - IGNITE_SETTINGS__HOSTS=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
+  #   depends_on: [ignite-node1, ignite-node2, ignite-node3]
+  #   networks: [backend]
+
+  # app2:
+  #   build: .
+  #   environment:
+  #     - SERVER_ID=node2
+  #     - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
+  #     - IGNITE_SETTINGS__HOSTS=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
+  #   depends_on: [ignite-node1, ignite-node2, ignite-node3]
+  #   networks: [backend]
+
+networks:
+  backend:
