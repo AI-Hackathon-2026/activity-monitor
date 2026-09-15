@@ -3,45 +3,82 @@ services:
     image: apacheignite/ignite:2.16.0
     environment:
       - CONFIG_URI=/opt/ignite/config/ignite-config.xml
+      - OPTION_LIBS=ignite-rest-http
     volumes:
       - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
     networks: [backend]
     ports:
-      - "10800:10800"  # Client port
+      - "10800:10800"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/ignite?cmd=version"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 20s
 
   ignite-node2:
     image: apacheignite/ignite:2.16.0
     environment:
+      - OPTION_LIBS=ignite-rest-http
       - CONFIG_URI=/opt/ignite/config/ignite-config.xml
     volumes:
       - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
     networks: [backend]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/ignite?cmd=version"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 20s
 
   ignite-node3:
     image: apacheignite/ignite:2.16.0
     environment:
+      - OPTION_LIBS=ignite-rest-http
       - CONFIG_URI=/opt/ignite/config/ignite-config.xml
     volumes:
       - ./ignite-config.xml:/opt/ignite/config/ignite-config.xml:ro
     networks: [backend]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/ignite?cmd=version"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 20s
 
-  # app1:
-  #   build: .
-  #   environment:
-  #     - SERVER_ID=node1
-  #     - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
-  #     - IGNITE_SETTINGS__HOSTS=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
-  #   depends_on: [ignite-node1, ignite-node2, ignite-node3]
-  #   networks: [backend]
+  app1:
+    build: .
+    environment:
+      - SERVER_ID=node1
+      - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
+      - IGNITE_SETTINGS__NODES=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
+    depends_on:
+      ignite-node1:
+        condition: service_healthy
+      ignite-node2:
+        condition: service_healthy
+      ignite-node3:
+        condition: service_healthy
+    networks: [backend]
+    ports:
+      - "8001:8000"
 
-  # app2:
-  #   build: .
-  #   environment:
-  #     - SERVER_ID=node2
-  #     - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
-  #     - IGNITE_SETTINGS__HOSTS=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
-  #   depends_on: [ignite-node1, ignite-node2, ignite-node3]
-  #   networks: [backend]
+  app2:
+    build: .
+    environment:
+      - SERVER_ID=node2
+      - IGNITE_SETTINGS__CACHE_NAME=whoami_cache
+      - IGNITE_SETTINGS__NODES=[{"host":"ignite-node1","port":10800},{"host":"ignite-node2","port":10800},{"host":"ignite-node3","port":10800}]
+    depends_on:
+      ignite-node1:
+        condition: service_healthy
+      ignite-node2:
+        condition: service_healthy
+      ignite-node3:
+        condition: service_healthy
+    networks: [backend]
+    ports:
+      - "8002:8000"
 
 networks:
   backend:

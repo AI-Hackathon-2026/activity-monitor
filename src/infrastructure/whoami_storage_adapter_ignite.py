@@ -3,7 +3,6 @@ from datetime import datetime
 
 from pyignite import AioClient
 from pyignite.exceptions import CacheError
-from pyignite.datatypes.prop_codes import PROP_NAME, PROP_BACKUPS_NUMBER
 
 
 from src.domain.whoami_storage import WhoamiEntity, ClientInfo
@@ -66,12 +65,7 @@ class WhoamiStorageAdapterIgnite(WhoamiRepository, LifeCycle):
 
     async def start(self):
         await self.client.connect(self._nodes)
-        self._cache = await self.client.get_or_create_cache(
-            {
-                PROP_NAME: self.cache_name,
-                PROP_BACKUPS_NUMBER: self.ignite_settings.replication_factor,
-            }
-        )
+        self._cache = await self.client.get_cache(self.cache_name)
 
     async def stop(self):
         await self.client.close()

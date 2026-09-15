@@ -21,5 +21,16 @@
                 </property>
             </bean>
         </property>
+
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="whoami_cache"/>
+                    <property name="backups" value="1"/>
+                    <property name="writeSynchronizationMode" value="FULL_SYNC"/>
+                    <property name="partitionLossPolicy" value="READ_ONLY_SAFE"/>
+                </bean>
+            </list>
+        </property>
     </bean>
 </beans>

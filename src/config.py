@@ -17,9 +17,6 @@ class IgniteSettings(BaseSettings):
         "whoami_cache",
         description="The name of the cache used for storing whoami data.",
     )
-    replication_factor: int = Field(
-        1, description="The replication factor for the Ignite cache."
-    )
 
     nodes: list[IgniteHost] = Field(..., description="A list of Ignite server nodes.")
 
@@ -32,7 +29,7 @@ class Settings(BaseSettings):
     )
 
     ignite_settings: IgniteSettings = Field(
-        default_factory=IgniteSettings,
+        default_factory=IgniteSettings,  # type: ignore
         description="Configuration settings for the Ignite server.",
     )
 
