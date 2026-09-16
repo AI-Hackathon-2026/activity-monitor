@@ -11,3 +11,8 @@ dependencies = [
     "pyignite>=0.6.1",
     "uvicorn>=0.53.0",
 ]
+
+[dependency-groups]
+dev = [
+    "locust>=2.46.5",
+]

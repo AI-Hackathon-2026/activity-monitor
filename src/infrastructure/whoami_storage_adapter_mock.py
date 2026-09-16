@@ -3,7 +3,6 @@ from src.application.whoami_storage_port import WhoamiRepository
 from src.infrastructure.lifecycle import LifeCycle
 
 
-
 class WhoamiStorageAdapterMock(WhoamiRepository, LifeCycle):
     def __init__(self):
         self.repository = {}
@@ -15,8 +14,6 @@ class WhoamiStorageAdapterMock(WhoamiRepository, LifeCycle):
     async def get_whoami_count(self) -> int:
         return len(self.repository)
 
-    async def start(self):
-        ...
+    async def start(self): ...
 
-    async def stop(self):
-        ...
+    async def stop(self): ...

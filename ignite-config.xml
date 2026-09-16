@@ -28,7 +28,7 @@
                     <property name="name" value="whoami_cache"/>
                     <property name="backups" value="1"/>
                     <property name="writeSynchronizationMode" value="FULL_SYNC"/>
-                    <property name="partitionLossPolicy" value="READ_ONLY_SAFE"/>
+                    <property name="partitionLossPolicy" value="READ_ONLY_ALL"/>
                 </bean>
             </list>
         </property>

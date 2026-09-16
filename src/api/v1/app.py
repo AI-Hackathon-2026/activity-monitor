@@ -53,7 +53,11 @@ async def post_whoami(
         ),
         timestamp=datetime.now(timezone.utc),
     )
-    await whoami_use_case.post_whoami(whoami_entity)
+    status = await whoami_use_case.post_whoami(whoami_entity)
+    if not status:
+        raise HTTPException(
+            status_code=500, detail="Failed to store whoami data in the repository"
+        )
     return WhoamiResponse(
         served_by=request.app.state.server_id,
         request_id=whoami_request.request_id,
