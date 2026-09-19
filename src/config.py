@@ -23,7 +23,7 @@ class IgniteSettings(BaseSettings):
 
 class Settings(BaseSettings):
     server_id: str = Field(
-        default_factory=lambda: str(uuid.uuid4()),
+        default_factory=lambda: str(uuid.uuid4())[:8],
         description="Unique identifier for the server instance.",
         examples=["server-1"],
     )
